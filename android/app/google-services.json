@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "779083479381",
+    "project_id": "flash-chat-7c405",
+    "storage_bucket": "flash-chat-7c405.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:779083479381:android:5f031be92879e471ac97dc",
+        "android_client_info": {
+          "package_name": "com.Lallivero.flash_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "779083479381-9880ib9cj7f0o97iara1p2sp4di75t3c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNQUi51HmlbYctd_fOp-n0EWXPlbl3UFE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "779083479381-9880ib9cj7f0o97iara1p2sp4di75t3c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
