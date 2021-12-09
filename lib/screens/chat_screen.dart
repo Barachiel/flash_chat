@@ -1,4 +1,5 @@
 import 'package:flash_chat/components/messages_stream.dart';
+import 'package:flash_chat/firestore_access.dart';
 import 'package:flash_chat/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
@@ -15,27 +16,22 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final messageTextController = TextEditingController();
-  final _auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
+  //final _auth = FirebaseAuth.instance;
+  //final _firestore = FirebaseFirestore.instance;
+  final _firestoreAccess = FirestoreAccess();
   late User loggedInUser;
   late String _messageText;
 
   void getCurrentUser() {
     try {
-      final User? user = _auth.currentUser;
+      // final User? user = _auth.currentUser;
+      final User? user = _firestoreAccess.getCurrentUser();
+
       if (user != null) {
         loggedInUser = user;
       }
     } catch (e) {
       print(e);
-    }
-  }
-
-  void messagesStream() async {
-    await for (var snapshot in _firestore.collection('messages').snapshots()) {
-      for (var message in snapshot.docs) {
-        print(message.data());
-      }
     }
   }
 
@@ -55,7 +51,7 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
               icon: const Icon(Icons.close),
               onPressed: () {
-                _auth.signOut();
+                _firestoreAccess.signOut();
                 Navigator.pushReplacementNamed(context, WelcomeScreen.id);
               }),
         ],
@@ -69,7 +65,7 @@ class _ChatScreenState extends State<ChatScreen> {
           children: <Widget>[
             MessagesStream(
               loggedInUser: loggedInUser.email,
-              firestore: _firestore,
+              firestore: _firestoreAccess,
             ),
             Container(
               decoration: kMessageContainerDecoration,
@@ -88,7 +84,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      _firestore.collection('messages').add({
+                      _firestoreAccess.getCollection('messages').add({
                         'text': _messageText,
                         'sender': loggedInUser.email,
                         'timestamp': FieldValue.serverTimestamp(),

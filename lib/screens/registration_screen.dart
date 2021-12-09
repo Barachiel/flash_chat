@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flash_chat/components/rounded_button.dart';
 import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../constants.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:flash_chat/firestore_access.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String id = 'registration_screen';
@@ -16,9 +18,12 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth = FirebaseAuth.instance;
+  //final _firestore = FirebaseFirestore.instance;
+  final _firestoreAccess = FirestoreAccess();
   bool _showSpinner = false;
   late String _email;
   late String _password;
+  late String _displayName;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +48,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               const SizedBox(
                 height: 48.0,
+              ),
+              TextField(
+                onChanged: (value) {
+                  _displayName = value;
+                },
+                textAlign: TextAlign.center,
+                textCapitalization: TextCapitalization.sentences,
+                decoration: kTextFieldDecoration(
+                    'Enter your display name', Colors.blueAccent),
+              ),
+              const SizedBox(
+                height: 8.0,
               ),
               TextField(
                 onChanged: (value) {
@@ -76,9 +93,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       setState(() {
                         _showSpinner = true;
                       });
-                      final newUser =
-                          await _auth.createUserWithEmailAndPassword(
-                              email: _email, password: _password);
+                      final newUser = _firestoreAccess.createNewUser(
+                          _email, _password, _displayName);
+
                       if (newUser != null) {
                         Navigator.pushReplacementNamed(context, ChatScreen.id);
                       }
